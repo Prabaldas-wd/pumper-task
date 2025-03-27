@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expandable Boxes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f8f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .box {
+            width: 350px;
+            background: white;
+            border: 2px solid #C8C8C8;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            /* text-align: center; */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .input {
+          width: 10%;
+        }
+
+        .content {
+            width: 100%;
+        }
+
+        .unit-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .actual-price {
+            font-family: Inter;
+            color : #808080;
+            font-weight: 400;
+            font-size: 10px;
+            line-height: 100%;
+            letter-spacing: 0%;
+            text-decoration: line-through;
+
+        }
+
+        .box.expanded {
+            height: auto;
+            padding-bottom: 20px;
+            align-items: flex-start;
+            background-color: #ffe6e6;
+        }
+        .box.selected {
+            border-color: #e68a9c;
+        }
+
+        .box-header {
+            font-size: 15px;
+            font-weight: bold;
+            display: flex;
+            span {
+                color: #e74c78;
+                margin: auto;
+            }
+
+        }
+
+        .options {
+            display: none;
+            margin-top: 10px;
+            width: 70%;
+        }
+
+        .box.expanded .options {
+            display: block;
+        }
+
+        .options table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .options th, .options td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        .dropdown {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .price {
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .off {
+            background-color:  #FF6B82;
+            font-family: Inter;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 100%;
+            letter-spacing: 0%;
+            text-align: center;
+            color: white;
+            padding:4px;
+            margin-inline: 10px;
+
+        }
+
+        .standard-price {
+            padding: 2px;
+            font-family: Inter;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 100%;
+            letter-spacing: 0%;
+
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 10px;
+            background: #e74c78;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .popular {
+            position: relative;
+            border: 2px solid #e68a9c;
+            padding-top: 20px; 
+        }
+
+        .badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: #e74c78;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 6px 20px;
+            /*border-radius: 5px;*/
+            border-radius: 0 0 5px 5px;
+            text-transform: uppercase;
+            display: inline-block;
+            z-index: 2;
+        }
+
+        /* Left Right-Angled Triangle */
+        .badge::before,
+        .badge::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            
+        }
+
+        /* Left Triangle */
+        .badge::before {
+            left: -10px; /* Move left */
+            transform: rotate(180deg);
+            border-width: 12px 10px 0 0;
+            border-color: #D7445B transparent transparent transparent;
+        }
+
+        /* Right Triangle */
+        .badge::after {
+            right: -10px; /* Move right */
+            transform: rotate(180deg);
+            border-width: 12px 0 0 10px; /* Right-angled triangle */
+            border-color: #D7445B transparent transparent transparent;
+        
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+    <div class="box" id="box1">
+        <div class="input">
+              <input type="radio" name="unit" class="radio" />
+        </div>
+        <div class="content">
+            <div class="unit-price">
+                <div>
+                    <div class="box-header">
+                        <span>1 Unit </span>
+                        <div class="off">10% Off</div>
+                    </div>
+                    <div class="standard-price">Standard Price</div>
+                </div>
+                
+                <div>
+                    <div class="price">$10.00 USD</div>
+                    <div class="actual-price">$24.00 USD</div>
+                </div>
+            </div>
+              <div class="options">
+                  <table>
+                      <tr>
+                          <th>Size</th>
+                          <th>Color</th>
+                      </tr>
+                      <tr>
+                          <td>
+                              <select class="dropdown size-dropdown">
+                                  <option>S</option>
+                                  <option>M</option>
+                                  <option>L</option>
+                                  <option>XL</option>
+                              </select>
+                          </td>
+                          <td>
+                              <select class="dropdown color-dropdown">
+                                  <option>Black</option>
+                                  <option>Red</option>
+                                  <option>Blue</option>
+                                  <option>Green</option>
+                              </select>
+                          </td>
+                      </tr>
+                  </table>
+              </div>
+        </div>
+    </div>
+
+    <div class="box popular" id="box2">
+    <span class="badge">MOST POPULAR</span>
+        <div class="input">
+            <input type="radio" name="unit" class="radio" />
+        </div>
+        <div class="content">
+            <div class="unit-price">
+                <div class="box-header">
+                    <span>2 Unit </span>
+                    <div class="off">20% Off</div>
+                </div>
+                <div>
+                    <div class="price">$18.00 USD</div>
+                    <div class="actual-price">$24.00 USD</div>
+                </div>
+            </div>
+            <div class="options">
+                <table>
+                    <tr>
+                        <th>Size</th>
+                        <th>Color</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="dropdown size-dropdown">
+                                <option>S</option>
+                                <option>M</option>
+                                <option>L</option>
+                                <option>XL</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="dropdown color-dropdown">
+                                <option>Black</option>
+                                <option>Red</option>
+                                <option>Blue</option>
+                                <option>Green</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="dropdown size-dropdown">
+                                <option>S</option>
+                                <option>M</option>
+                                <option>L</option>
+                                <option>XL</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="dropdown color-dropdown">
+                                <option>Black</option>
+                                <option>Red</option>
+                                <option>Blue</option>
+                                <option>Green</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    
+</div>
+
+
+    <div class="box" id="box3">
+      <div class="input">
+              <input type="radio" name="unit" class="radio" />
+        </div>
+        <div class="content">
+            <div class="unit-price">
+                <div class="box-header">
+                    <span>3 Unit </span>
+                    <div class="off">30% Off</div>
+                </div>
+
+                <div>
+                    <div class="price">$24.00 USD</div>
+                    <div class="actual-price">$24.00 USD</div>
+                </div>
+            </div>
+        <div class="options">
+            <table>
+                <tr>
+                    <th>Size</th>
+                    <th>Color</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select class="dropdown size-dropdown">
+                            <option>S</option>
+                            <option>M</option>
+                            <option>L</option>
+                            <option>XL</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="dropdown color-dropdown">
+                            <option>Black</option>
+                            <option>Red</option>
+                            <option>Blue</option>
+                            <option>Green</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <select class="dropdown size-dropdown">
+                            <option>S</option>
+                            <option>M</option>
+                            <option>L</option>
+                            <option>XL</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="dropdown color-dropdown">
+                            <option>Black</option>
+                            <option>Red</option>
+                            <option>Blue</option>
+                            <option>Green</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <select class="dropdown size-dropdown">
+                            <option>S</option>
+                            <option>M</option>
+                            <option>L</option>
+                            <option>XL</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="dropdown color-dropdown">
+                            <option>Black</option>
+                            <option>Red</option>
+                            <option>Blue</option>
+                            <option>Green</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+          
+        </div>
+        
+    </div>
+
+    <button class="add-to-cart">+ Add to Cart</button>
+
+    <script>
+        document.querySelectorAll(".box").forEach(box => {
+            box.addEventListener("click", function () {
+                this.classList.toggle("expanded");
+                this.classList.add("selected");
+            });
+
+            // Prevent box collapse when interacting with dropdowns
+            box.querySelectorAll(".dropdown").forEach(dropdown => {
+                dropdown.addEventListener("click", function (event) {
+                    event.stopPropagation(); // Stops the click from reaching the box
+                });
+            });
+            
+            // this.classList.add("selected");
+        });
+    </script>
+
+</body>
+</html>
